@@ -13,9 +13,9 @@ public:
 
 private:
     QAsyncSerial serial;
-	QLabel* const voltLabel = new QLabel("Voltage", this);
-	QLabel* const voltUnit = new QLabel("V", this);
-	QLabel* const ampLabel = new QLabel("Amperage", this);
+	QLabel *voltLabel;
+	QLabel *voltUnit;
+	QLabel *ampLabel;
 	QLabel *ampUnit;
 	QLabel *volts;
 	QLabel *amps;

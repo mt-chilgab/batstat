@@ -14,8 +14,8 @@ list(TRANSFORM QVIApp_HEADERS PREPEND "src/")
 add_executable(QVoltageIndicator ${QVIApp_SRCS})
 
 ## For Qt Integration
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
-target_link_libraries(QVoltageIndicator Qt5::Widgets)
+find_package(Qt5 COMPONENTS Core Widgets Gui REQUIRED)
+target_link_libraries(QVoltageIndicator Qt5::Widgets Qt5::Gui)
 
 ## Link libraries
 set(BOOST_LIBS date_time system)
