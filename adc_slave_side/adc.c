@@ -1,5 +1,5 @@
 #ifndef F_CPU 
-	#define F_CPU 16000000
+#define F_CPU 16000000
 #endif
 
 #define FOSC 16000000
@@ -88,10 +88,13 @@ void freeBuf(uartBuf *buf){
 	free(buf->buf);
 }
 
-void double2buf(const double val, const size_t ipl, const size_t fpl, uartBuf *buf){
+void double2buf(const double val, const size_t fpl, uartBuf *buf){
 	
 	uint32_t ipart = (uint32_t) val;  
 	double   fpart = val - (double) ipart;
+
+	size_t ipl = 1;
+	while(ipart / myPow(ipl) > 0) ipl++;
 
 	size_t i;
 	for(i=ipl; i>0; i--){
@@ -108,39 +111,20 @@ void double2buf(const double val, const size_t ipl, const size_t fpl, uartBuf *b
 
 }
 
-void int2buf(const uint16_t val, uartBuf *buf){
-	
-	size_t i, j;
-	int16_t res = -1;
-
-	j = 0;
-	while (res != val){
-		j++;
-		res = val % myPow(j);
-	}
-
-	for(i=j; i>0; i--){
-		enq(buf, (uint8_t)((val % myPow(i)) / myPow(i-1)) + 48);
-	}
-}
-
-void adc2buf(const uint16_t adcValue, const size_t ipl, const size_t fpl, uartBuf *buf){
+void adc2buf(const uint16_t adcValue, uartBuf *buf){
 
 	double val = adcValue * 4.921 / 1024;
 
-	enqStr(buf, "(");
-	int2buf(adcValue, buf);
-       	enqStr(buf, ") ");	
-
-	enqStr(buf, "Out: ");	
-	double2buf(val, 1, fpl, buf);
-	enqStr(buf, "V\t");
-
-	enqStr(buf, "@ ");
-	if( (val + 0.3*12)/0.2 < 18.1 ) enqStr(buf, "Off\n\n");
+	if( (val + 0.3*11.76)/0.2 < 18.1 ){
+		enqStr(buf, "Off ");
+		double2buf(14.23, 3, buf);
+		enq(buf, 10);
+	}
 	else{
-		double2buf((val + 0.3*12)/0.2, ipl, 2, buf); 
-		enqStr(buf, "V\n\n");
+		double2buf((val + 0.3*11.76)/0.2, 2, buf); 
+		enq(buf, 32);
+		double2buf(14.23, 3, buf);
+		enq(buf, 10);
 	}
 }
 
@@ -185,7 +169,7 @@ ISR(ADC_vect){
 	adcLow = (uint16_t) ADCL;
 	adcHigh = (uint16_t) ADCH << 8;
 
-	adc2buf(adcLow + adcHigh, 2, 3, buffer);
+	adc2buf(adcLow + adcHigh, buffer);
 	while(sizeBuf(buffer) != 0){
 		while ( !(UCSR0A & (1 << UDRE0)) );
 		UDR0 = deq(buffer);	
