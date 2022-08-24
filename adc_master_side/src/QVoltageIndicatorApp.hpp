@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include "QAsyncSerial.hpp"
 #include <QLabel>
@@ -24,5 +23,3 @@ private:
 private slots:
     void onLineReceived(QString data);
 };
-
-#endif // MAINWINDOW_H

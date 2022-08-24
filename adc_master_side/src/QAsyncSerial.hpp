@@ -2,9 +2,7 @@
  * Author: Terraneo Federico
  * Distributed under the Boost Software License, Version 1.0.
  */
-
-#ifndef QASYNCSERIAL_H
-#define QASYNCSERIAL_H
+#pragma once
 
 #include <QObject>
 #include <memory>
@@ -83,5 +81,3 @@ private:
 
     std::shared_ptr<QAsyncSerialImpl> pimpl; ///< Pimpl idiom
 };
-
-#endif // QASYNCSERIAL_H

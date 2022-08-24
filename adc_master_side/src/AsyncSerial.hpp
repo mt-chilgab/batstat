@@ -4,9 +4,7 @@
  * Distributed under the Boost Software License, Version 1.0.
  * Created on September 7, 2009, 10:46 AM
  */
-
-#ifndef ASYNCSERIAL_H
-#define	ASYNCSERIAL_H
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -228,4 +226,4 @@ public:
     virtual ~CallbackAsyncSerial();
 };
 
-#endif //ASYNCSERIAL_H
+

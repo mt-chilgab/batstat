@@ -1,0 +1,23 @@
+project(QVIApp)
+cmake_minimum_required(VERSION 2.8)
+
+## Target
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_AUTOMOC ON)
+SET(CMAKE_AUTOUIC ON)
+
+set(QVIApp_SRCS src/AsyncSerial.cpp src/QAsyncSerial.cpp src/QVoltageIndicatorApp.cpp src/main.cpp)
+set(QVIApp_HEADERS src/AsyncSerial.hpp src/QAsyncSerial.hpp src/QVoltageIndicatorApp.hpp)
+add_executable(QVoltageIndicator ${QVIApp_SRCS})
+
+## For Qt Integration
+find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+target_link_libraries(QVoltageIndicator Qt5::Widgets)
+
+## Link libraries
+set(BOOST_LIBS date_time system)
+find_package(Boost COMPONENTS ${BOOST_LIBS} REQUIRED)
+target_link_libraries(QVoltageIndicator ${Boost_LIBRARIES})
+find_package(Threads REQUIRED)
+target_link_libraries(QVoltageIndicator ${CMAKE_THREAD_LIBS_INIT})
