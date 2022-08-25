@@ -111,26 +111,28 @@ void double2buf(const double val, const size_t fpl, uartBuf *buf){
 
 }
 
-void adc2buf(const uint16_t adcValue, uartBuf *buf){
+void adc2buf(const uint16_t adcValue, uartBuf *buf, const uint8_t voltsOrAmps){
 
 	double val = adcValue * 4.921 / 1024;
 
-	if( (val + 0.3*11.76)/0.2 < 18.1 ){
-		enqStr(buf, "Off ");
-		double2buf(14.23, 3, buf);
-		enq(buf, 10);
+	//0: volts, 1: amps
+	if(voltsOrAmps == 0){
+		if( (val + 0.3*11.76)/0.2 < 18.1 ) enqStr(buf, "Off ");
+		else{
+			double2buf((val + 0.3*11.76)/0.2, 2, buf); 
+			enq(buf, 32);
+		}
 	}
 	else{
-		double2buf((val + 0.3*11.76)/0.2, 2, buf); 
-		enq(buf, 32);
-		double2buf(14.23, 3, buf);
+		double2buf(val, 2, buf);
 		enq(buf, 10);
-	}
+	}	
 }
 
 static volatile uartBuf *buffer;
 static volatile uint16_t adcHigh;
 static volatile uint16_t adcLow;
+static volatile uint8_t  check = 0x00;
 
 void main(void){
 
@@ -150,6 +152,7 @@ void main(void){
 
 	ADMUX  =  (1 << REFS0);
 	ADMUX  &=  ~(1 << ADLAR);
+	ADMUX  &=  ~(1 << MUX0);
 
 	ADCSRA |= (1 << ADFR);
 	ADCSRA |= (1 << ADEN);
@@ -168,10 +171,19 @@ void main(void){
 ISR(ADC_vect){
 	adcLow = (uint16_t) ADCL;
 	adcHigh = (uint16_t) ADCH << 8;
+	volatile const uint8_t adcChannel = ADMUX & (1 << MUX0);
 
-	adc2buf(adcLow + adcHigh, buffer);
-	while(sizeBuf(buffer) != 0){
-		while ( !(UCSR0A & (1 << UDRE0)) );
-		UDR0 = deq(buffer);	
+	adc2buf(adcLow + adcHigh, buffer, adcChannel);
+	check |= 1 << adcChannel;
+	ADMUX ^= (1 << MUX0);
+	
+	if(check == 3){
+		while(sizeBuf(buffer) != 0){
+			while ( !(UCSR0A & (1 << UDRE0)) );
+			UDR0 = deq(buffer);
+		}
+		check = 0;	
 	}
+	
+	_delay_ms(100);
 }
