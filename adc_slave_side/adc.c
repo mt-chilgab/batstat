@@ -184,6 +184,6 @@ ISR(ADC_vect){
 		}
 		check = 0;	
 	}
-	
-	_delay_ms(100);
+
+	_delay_ms(300);
 }
