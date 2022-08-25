@@ -1,4 +1,0 @@
-/home/ubuntu/batstat/adc_master_side/CMakeFiles/rebuild_cache.dir
-/home/ubuntu/batstat/adc_master_side/CMakeFiles/edit_cache.dir
-/home/ubuntu/batstat/adc_master_side/CMakeFiles/QVoltageIndicator.dir
-/home/ubuntu/batstat/adc_master_side/CMakeFiles/QVoltageIndicator_autogen.dir
