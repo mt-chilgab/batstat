@@ -8,7 +8,7 @@ class VoltageIndicator : public QWidget
     Q_OBJECT
 
 public:
-    VoltageIndicator(QWidget *parent = 0);
+    VoltageIndicator(QWidget *parent = nullptr);
     ~VoltageIndicator();
 
 private:
