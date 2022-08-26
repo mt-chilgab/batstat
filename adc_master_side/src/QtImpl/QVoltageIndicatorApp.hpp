@@ -16,6 +16,9 @@ public:
 	
 	string getVolts();
 	string getAmps();
+	string getAmpUnit();
+	
+	bool sendMessage;
 
 private:
     QAsyncSerial serial;
@@ -25,7 +28,7 @@ private:
 	QLabel *ampUnit;
 	QLabel *volts;
 	QLabel *amps;
-
+	
 private slots:
     void onLineReceived(QString data);
 };

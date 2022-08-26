@@ -26,6 +26,9 @@ public:
 	void clearData();
 	void writeData();
 
+	bool isConnected;
+	bool estabConnection();
+
 private:
 	string data;
 

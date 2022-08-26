@@ -47,7 +47,9 @@ VoltageIndicator::VoltageIndicator(QWidget *parent)
 	setLayout(grid);	
     connect(&serial,SIGNAL(lineReceived(QString)), this, SLOT(onLineReceived(QString)));
 
-	serial.open("/dev/ttyUSB0", 57600);
+	serial.open("/dev/ttyACM0", 57600);
+
+	sendMessage = false;
 }
 
 VoltageIndicator::~VoltageIndicator()
@@ -62,6 +64,10 @@ string VoltageIndicator::getAmps(){
 	return amps->text().toStdString();
 }
 
+string VoltageIndicator::getAmpUnit(){
+	return ampUnit->text().toStdString();
+}
+
 void VoltageIndicator::onLineReceived(QString data)
 {
 	QStringList tmp = data.split(" "); 
@@ -69,11 +75,13 @@ void VoltageIndicator::onLineReceived(QString data)
 
 	double amperage = tmp.at(1).toDouble();
 	if(amperage < 1){
-		ampUnit->setText("mA");
+		ampUnit->setText(QString::fromStdString("mA"));
 		amps->setText(QString::number(amperage*1000, 'f', 0));
 	}
 	else{
-		ampUnit->setText("A");
+		ampUnit->setText(QString::fromStdString("A"));
 		amps->setText(QString::number(amperage, 'f', 2));
 	}
+
+	this->sendMessage = true;
 }

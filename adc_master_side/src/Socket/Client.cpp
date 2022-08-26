@@ -11,7 +11,8 @@ Sock::Sock(){
 	server.sin_family = AF_INET;
 	memcpy(&server.sin_addr, hp->h_addr, hp->h_length);
 	server.sin_port = port;
-	if(connect(sock, (struct sockaddr *)&server, sizeof(server)) < 0) perror("Connecting Stream Socket");
+	
+	isConnected = false;
 }
 
 Sock::~Sock(){
@@ -34,4 +35,8 @@ void Sock::writeData(){
 	if(write(sock, strdup(data.c_str()), data.length()*sizeof(char)) < 0){
 		perror("Writing Message");
 	}
+}
+
+bool Sock::estabConnection(){
+	return connect(sock, (struct sockaddr *)&server, sizeof(server)) == 0;
 }
