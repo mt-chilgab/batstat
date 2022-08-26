@@ -70,18 +70,17 @@ string VoltageIndicator::getAmpUnit(){
 
 void VoltageIndicator::onLineReceived(QString data)
 {
-	QStringList tmp = data.split(" "); 
-	volts->setText(tmp.at(0));
+	splitList = data.split(" "); 
+	volts->setText(splitList.at(0));
 
-	double amperage = tmp.at(1).toDouble();
-	if(amperage < 1){
+	if(splitList.at(1).toDouble() < 1){
 		ampUnit->setText(QString::fromStdString("mA"));
-		amps->setText(QString::number(amperage*1000, 'f', 0));
+		amps->setText(QString::number(splitList.at(1).toDouble()*1000, 'f', 0));
 	}
 	else{
 		ampUnit->setText(QString::fromStdString("A"));
-		amps->setText(QString::number(amperage, 'f', 2));
+		amps->setText(QString::number(splitList.at(1).toDouble(), 'f', 2));
 	}
 
-	this->sendMessage = true;
+	sendMessage = true;
 }

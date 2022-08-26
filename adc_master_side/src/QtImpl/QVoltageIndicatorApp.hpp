@@ -29,6 +29,8 @@ private:
 	QLabel *volts;
 	QLabel *amps;
 	
+	QStringList splitList;	
+
 private slots:
     void onLineReceived(QString data);
 };

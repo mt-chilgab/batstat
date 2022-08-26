@@ -2,13 +2,12 @@ project(QVIApp)
 cmake_minimum_required(VERSION 2.8)
 
 ## Target
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11 -Isrc -Isrc/AsyncSerial -Isrc/QtImpl -Isrc/Socket")
 set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_AUTOMOC ON)
 SET(CMAKE_AUTOUIC ON)
 
-set(QVIApp_SRCS src/AsyncSerial.cpp src/QAsyncSerial.cpp src/QVoltageIndicatorApp.cpp src/main.cpp)
-set(QVIApp_HEADERS src/AsyncSerial.hpp src/QAsyncSerial.hpp src/QVoltageIndicatorApp.hpp)
+set(QVIApp_SRCS src/AsyncSerial/AsyncSerial.cpp src/QtImpl/QAsyncSerial.cpp src/QtImpl/QVoltageIndicatorApp.cpp src/Socket/Client.cpp src/main.cpp)
 add_executable(QVoltageIndicator ${QVIApp_SRCS})
 
 ## For Qt Integration

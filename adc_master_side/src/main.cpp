@@ -2,40 +2,39 @@
 #include "Socket/Client.hpp"
 
 #include <QApplication>
-#include <iostream>
-#include <stdexcept>
 #include <thread>
 
-void sendVoltsAmps(Sock *s, VoltageIndicator *w){
+
+void sendVoltsAmps(Sock *socket, VoltageIndicator *window){
 	while(1){
-		s->setData(w->getVolts() + "V " + w->getAmps() + w->getAmpUnit() + "\n");
+		socket->setData(window->getVolts() + "V " + window->getAmps() + window->getAmpUnit() + "\n");
 		
-		while(!(s->isConnected)){
+		while(!(socket->isConnected)){
 			printf("Waiting...\n");
 			sleep(1);
-			s->isConnected = s->estabConnection();
+			socket->isConnected = socket->estabConnection();
 		}
 
-		if(w->sendMessage){
-			s->writeData();
-			s->clearData();
+		if(window->sendMessage){
+			socket->writeData();
+			socket->clearData();
 		}
 
-		w->sendMessage = false;
+		window->sendMessage = false;
 	}
 }	
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    VoltageIndicator *w = new VoltageIndicator();
+    VoltageIndicator *window = new VoltageIndicator();
+    Sock *socket = new Sock();
 
-	w->setFixedSize(300, 170);
-	w->setWindowTitle("Battery Status Indicator");
-    w->show();
-
-	Sock *s = new Sock();
-	thread send(sendVoltsAmps, s, w);
+	window->setWindowTitle("Battery Status Indicator");
+	window->setFixedSize(300, 170);
+	window->show();
+	
+	thread send(sendVoltsAmps, socket, window);
 	a.exec();
 
 	send.join();
