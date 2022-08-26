@@ -21,13 +21,16 @@ public:
 	Sock();
 	~Sock();
 
+	void initSock();
+
+	bool isLastTransmissionOK;
 	string getData();
 	void setData(string d);
 	void clearData();
 	void writeData();
 
 	bool isConnected;
-	bool estabConnection();
+	void estabConnection();
 
 private:
 	string data;
@@ -35,7 +38,7 @@ private:
 	const string host = HOST;
 	const int port = htons(PORT);
 
-	int sock;
+	int sock, opt;
 	struct sockaddr_in server;
 	struct hostent *hp;
 };

@@ -10,16 +10,26 @@ void sendVoltsAmps(Sock *socket, VoltageIndicator *window){
 		socket->setData(window->getVolts() + "V " + window->getAmps() + window->getAmpUnit() + "\n");
 		
 		while(!(socket->isConnected)){
-			printf("Waiting...\n");
+			printf("Waiting for the server to open...\n");
 			sleep(1);
-			socket->isConnected = socket->estabConnection();
+			socket->estabConnection();
 		}
 
 		if(window->sendMessage){
-			socket->writeData();
+			while(1){
+				socket->writeData();
+				
+				if(!(socket->isLastTransmissionOK)){
+					printf("Again waiting for the server...\n");
+					sleep(1);
+				
+					socket->initSock();
+					socket->estabConnection();
+				}
+				else break;
+			}
 			socket->clearData();
 		}
-
 		window->sendMessage = false;
 	}
 }	

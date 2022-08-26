@@ -2,21 +2,29 @@
 #include <iostream>
 
 Sock::Sock(){
+	initSock();
+	isConnected = false;
+	isLastTransmissionOK = false;
+}
+
+Sock::~Sock(){
+	close(sock);
+}
+
+void Sock::initSock(){
 	sock = socket(AF_INET, SOCK_STREAM, 0);
 	if(sock < 0) perror("Opening Stream Socket");
-	
+
+	opt = 1;
+	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
+	setsockopt(sock, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt));
+
 	hp = gethostbyname(strdup(host.c_str())); 
 	if(hp == 0) cerr << host << ": unknown host" << endl;
 
 	server.sin_family = AF_INET;
 	memcpy(&server.sin_addr, hp->h_addr, hp->h_length);
 	server.sin_port = port;
-	
-	isConnected = false;
-}
-
-Sock::~Sock(){
-	close(sock);
 }
 
 string Sock::getData(){
@@ -32,11 +40,11 @@ void Sock::clearData(){
 }
 
 void Sock::writeData(){
-	if(write(sock, strdup(data.c_str()), data.length()*sizeof(char)) < 0){
-		perror("Writing Message");
-	}
+	isLastTransmissionOK = send(sock, strdup(data.c_str()), data.length()*sizeof(char), MSG_NOSIGNAL) >= 0;
+		
+	if(!isLastTransmissionOK) close(sock);
 }
 
-bool Sock::estabConnection(){
-	return connect(sock, (struct sockaddr *)&server, sizeof(server)) == 0;
+void Sock::estabConnection(){
+	isConnected = connect(sock, (struct sockaddr *)&server, sizeof(server)) == 0;
 }
