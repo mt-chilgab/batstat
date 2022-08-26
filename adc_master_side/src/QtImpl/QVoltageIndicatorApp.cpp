@@ -47,11 +47,19 @@ VoltageIndicator::VoltageIndicator(QWidget *parent)
 	setLayout(grid);	
     connect(&serial,SIGNAL(lineReceived(QString)), this, SLOT(onLineReceived(QString)));
 
-	serial.open("/dev/ttyACM0", 57600);
+	serial.open("/dev/ttyUSB0", 57600);
 }
 
 VoltageIndicator::~VoltageIndicator()
 {
+}
+
+string VoltageIndicator::getVolts(){
+	return volts->text().toStdString();
+}
+
+string VoltageIndicator::getAmps(){
+	return amps->text().toStdString();
 }
 
 void VoltageIndicator::onLineReceived(QString data)

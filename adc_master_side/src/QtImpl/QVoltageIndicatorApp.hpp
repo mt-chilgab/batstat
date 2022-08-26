@@ -2,6 +2,9 @@
 
 #include "QAsyncSerial.hpp"
 #include <QLabel>
+#include <string>
+
+using namespace std;
 
 class VoltageIndicator : public QWidget
 {
@@ -10,6 +13,9 @@ class VoltageIndicator : public QWidget
 public:
     VoltageIndicator(QWidget *parent = nullptr);
     ~VoltageIndicator();
+	
+	string getVolts();
+	string getAmps();
 
 private:
     QAsyncSerial serial;
