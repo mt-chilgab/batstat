@@ -5,7 +5,7 @@
 using namespace std;
 
 VoltageIndicator::VoltageIndicator(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent), splitList(QStringList()), lineRcvd(false)
 {
 	voltLabel = new QLabel("Voltage", this);
 	voltLabel->setGeometry(120, 380, 1000, 80);
@@ -50,8 +50,6 @@ VoltageIndicator::VoltageIndicator(QWidget *parent)
     connect(&serial,SIGNAL(lineReceived(QString)), this, SLOT(onLineReceived(QString)));
 
 	serial.open("/dev/ttyACM0", 57600);
-
-	lineRcvd = false;
 }
 
 VoltageIndicator::~VoltageIndicator()
