@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     VoltageIndicator *window = new VoltageIndicator();
-    Sock *socket = new Sock();
+    Sock *socket = new Sock(40000);
 
 	window->setWindowTitle("Battery Status Indicator");
 	window->setFixedSize(300, 170);

@@ -12,13 +12,12 @@
 #include <string>
 using namespace std;
 
-#define HOST "localhost"
-#define PORT 40000
 
 class Sock{
 
 public:
-	Sock();
+	Sock(int p);
+	Sock(string h, int p);
 	~Sock();
 
 	void initSock();
@@ -36,8 +35,8 @@ public:
 private:
 	string message;
 
-	const string host = HOST;
-	const int port = htons(PORT);
+	string host;
+	int port;
 
 	int sock, opt;
 	struct sockaddr_in server;

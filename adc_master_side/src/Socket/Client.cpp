@@ -1,10 +1,15 @@
 #include "Client.hpp"
 #include <iostream>
 
-Sock::Sock(){
+Sock::Sock(int p): host("localhost"), isConnected(false), isLastTransmissionOK(false), message("\0"){
+	port = htons(p);	
 	initSock();
-	isConnected = false;
-	isLastTransmissionOK = false;
+}
+
+Sock::Sock(string h, int p): isConnected(false), isLastTransmissionOK(false), message("\0"){
+	host = h;
+	port = htons(p);
+	initSock();
 }
 
 Sock::~Sock(){
