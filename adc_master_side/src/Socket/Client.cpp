@@ -8,7 +8,7 @@ Sock::Sock(){
 }
 
 Sock::~Sock(){
-	close(sock);
+	closeSock();
 }
 
 void Sock::initSock(){	
@@ -28,9 +28,8 @@ void Sock::initSock(){
 	server.sin_port = port;
 }
 
-void Sock::reInitSock(){
+void Sock::closeSock(){
 	close(sock);
-	initSock();
 }
 
 string Sock::getMessage(){

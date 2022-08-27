@@ -2,6 +2,8 @@
 #include <QFont>
 #include <QGridLayout>
 
+using namespace std;
+
 VoltageIndicator::VoltageIndicator(QWidget *parent)
     : QWidget(parent)
 {
@@ -57,19 +59,24 @@ VoltageIndicator::~VoltageIndicator()
 }
 
 string VoltageIndicator::getVolts(){
+	lock_guard<mutex> lg(classMutex);
 	return volts->text().toStdString();
 }
 
 string VoltageIndicator::getAmps(){
+	lock_guard<mutex> lg(classMutex);
 	return amps->text().toStdString();
 }
 
 string VoltageIndicator::getAmpUnit(){
+	lock_guard<mutex> lg(classMutex);
 	return ampUnit->text().toStdString();
 }
 
 void VoltageIndicator::onLineReceived(QString data)
 {
+	lock_guard<mutex> lg(classMutex);	
+
 	splitList = data.split(" "); 
 	volts->setText(splitList.at(0));
 

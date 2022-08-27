@@ -22,7 +22,7 @@ public:
 	~Sock();
 
 	void initSock();
-	void reInitSock();
+	void closeSock();
 
 	bool isConnected;
 	void estabConnection();

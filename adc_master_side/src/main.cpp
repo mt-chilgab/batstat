@@ -20,10 +20,11 @@ void sendVoltsAmps(Sock *socket, VoltageIndicator *window){
 				socket->writeMessage();
 				
 				if(!(socket->isLastTransmissionOK)){
+					socket->closeSock();
 					printf("Again waiting for the server...\n");
 					sleep(1);
 					
-					socket->reInitSock();
+					socket->initSock();
 					socket->estabConnection();
 				}
 				else break;

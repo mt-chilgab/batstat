@@ -3,12 +3,15 @@
 #include "QAsyncSerial.hpp"
 #include <QLabel>
 #include <string>
+#include <mutex>
 
 using namespace std;
 
 class VoltageIndicator : public QWidget
 {
     Q_OBJECT
+
+	mutable mutex classMutex;
 
 public:
     VoltageIndicator(QWidget *parent = nullptr);
@@ -21,6 +24,7 @@ public:
 	bool lineRcvd;
 
 private:
+	
     QAsyncSerial serial;
 	QLabel *voltLabel;
 	QLabel *voltUnit;
