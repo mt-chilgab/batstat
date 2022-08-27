@@ -18,7 +18,7 @@ public:
 	string getAmps();
 	string getAmpUnit();
 	
-	bool sendMessage;
+	bool lineRcvd;
 
 private:
     QAsyncSerial serial;

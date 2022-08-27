@@ -22,18 +22,19 @@ public:
 	~Sock();
 
 	void initSock();
-
-	bool isLastTransmissionOK;
-	string getData();
-	void setData(string d);
-	void clearData();
-	void writeData();
+	void reInitSock();
 
 	bool isConnected;
 	void estabConnection();
 
+	bool isLastTransmissionOK;
+	string getMessage();
+	void setMessage(string message);
+	void clearMessage();
+	void writeMessage();
+
 private:
-	string data;
+	string message;
 
 	const string host = HOST;
 	const int port = htons(PORT);

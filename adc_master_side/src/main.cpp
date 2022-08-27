@@ -7,7 +7,7 @@
 
 void sendVoltsAmps(Sock *socket, VoltageIndicator *window){
 	while(1){
-		socket->setData(window->getVolts() + "V " + window->getAmps() + window->getAmpUnit() + "\n");
+		socket->setMessage(window->getVolts() + "V " + window->getAmps() + window->getAmpUnit() + "\n");
 		
 		while(!(socket->isConnected)){
 			printf("Waiting for the server to open...\n");
@@ -15,22 +15,22 @@ void sendVoltsAmps(Sock *socket, VoltageIndicator *window){
 			socket->estabConnection();
 		}
 
-		if(window->sendMessage){
+		if(window->lineRcvd){
 			while(1){
-				socket->writeData();
+				socket->writeMessage();
 				
 				if(!(socket->isLastTransmissionOK)){
 					printf("Again waiting for the server...\n");
 					sleep(1);
-				
-					socket->initSock();
+					
+					socket->reInitSock();
 					socket->estabConnection();
 				}
 				else break;
 			}
-			socket->clearData();
+			socket->clearMessage();
 		}
-		window->sendMessage = false;
+		window->lineRcvd = false;
 	}
 }	
 

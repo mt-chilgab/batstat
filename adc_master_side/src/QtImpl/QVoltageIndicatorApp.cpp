@@ -49,7 +49,7 @@ VoltageIndicator::VoltageIndicator(QWidget *parent)
 
 	serial.open("/dev/ttyACM0", 57600);
 
-	sendMessage = false;
+	lineRcvd = false;
 }
 
 VoltageIndicator::~VoltageIndicator()
@@ -82,5 +82,5 @@ void VoltageIndicator::onLineReceived(QString data)
 		amps->setText(QString::number(splitList.at(1).toDouble(), 'f', 2));
 	}
 
-	sendMessage = true;
+	lineRcvd = true;
 }
