@@ -23,6 +23,7 @@ public:
 	void initSock();
 	void closeSock();
 
+	int getPort();
 	bool isConnected;
 	void estabConnection();
 

@@ -18,7 +18,7 @@ Sock::~Sock(){
 
 void Sock::initSock(){	
 	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if(sock < 0) perror("Opening Stream Socket");
+	if(sock < 0) perror(strdup(("(" + to_string(ntohs(port)) + ") Opening Stream Socket").c_str()));
 
 	opt = 1;
 	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
@@ -37,6 +37,10 @@ void Sock::closeSock(){
 	close(sock);
 }
 
+int Sock::getPort(){
+	return ntohs(this->server.sin_port);
+}
+
 string Sock::getMessage(){
 	return this->message;
 }
@@ -51,10 +55,10 @@ void Sock::clearMessage(){
 
 void Sock::writeMessage(){
 	isLastTransmissionOK = send(sock, strdup(message.c_str()), message.length()*sizeof(char), MSG_NOSIGNAL) >= 0;
-	if(!isLastTransmissionOK) perror("Writing Message");
+	if(!isLastTransmissionOK) perror(strdup(("(" + to_string(ntohs(server.sin_port)) + ") Writing Message").c_str()));
 }
 
 void Sock::estabConnection(){
 	isConnected = connect(sock, (struct sockaddr *)&server, sizeof(server)) == 0;
-	if(!isConnected) perror("Connecting to Server");
+	if(!isConnected) perror(strdup(("(" + to_string(ntohs(server.sin_port)) + ") Connecting to Server").c_str()));
 }
